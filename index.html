@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel='stylesheet' href='index.css'>
+</head>
+
+<body>
+    <div id="app">
+        <div id="script-select">
+            <select name="" id="items" v-model="selected">
+                <option v-for="item in items" v-bind:value="item">
+                    {{ item.title }}
+                </option>
+            </select>
+        </div>
+        <div id="info" v-bind:value="selected" class="grid-container">
+            <span id="title" class="item title">{{ selected.title }} ({{ selected.devpath }})</span>
+            <span class="item label">Tier</span></span><span id="tier" class="item datum"> {{ selected.tier }}</span>
+            <span class="item label">Developer</span><span id="developer" class="item datum"> {{ selected.developer }}
+            </span>
+            <span class="item label">Memory Usage</span><span id="memory" class="item datum">{{ selected.memoryusage }}</span>
+            <span class="item label">Codin' Required</span><span id="requirements" class="item datum">{{selected.requirements
+                || "Basic"}}</span>
+            <span class="item label">Use Case</span><span id="use" class="item datum">{{ selected.usecase }}</span>
+            <span class="item label">Cost</span><span id="cost" class="item datum">{{ selected.cost }} </span>
+            <span class="item label">Delivery</span><span id="delivery" class="item datum"> {{ selected.delivery }}</span>
+            <span class="item label">Mode</span><span id="mode" class="item datum">{{ selected.mode }}</span>
+            <span class="item label">Functions</span><span id="functions" class="item datum"> {{ selected.functions }}
+            </span>
+            <span v-if="selected.tier==6" class="item label">Passive</span><span id="hotsim-passive" v-if="selected.tier==6"
+                class="item datum">{{ selected.passive }}</span>
+            <span v-if="selected.tier==6" class="item label">Active</span><span id="hotsim-active" v-if="selected.tier==6"
+                class="item datum">{{ selected.active }}</span>
+            <span v-if="selected.tier==6" class="item label">Once</span><span id="hotsim-once" v-if="selected.tier==6"
+                class="item datum">{{ selected.once }}</span>
+        </div>
+    </div>
+    <footer>
+        Please report errors or bugs to <a href="mailto:quincy.west.codes@outlook.com?Subject=Riparian%20Flow%20Site%Issue">Walker
+            Greenleaf.</a>
+    </footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src='rip.js'></script>
+<script src='data.js'></script>
+
+</html>
