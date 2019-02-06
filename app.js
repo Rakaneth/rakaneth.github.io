@@ -37,13 +37,15 @@ let app = new Vue({
         chosenKnacks: [],
         loadouts: [],
         curLoadout: [],
-        fundamentals: getScriptsOfTier(0),
-        tier1: getScriptsOfTier(1),
-        tier2: getScriptsOfTier(2),
-        tier3: getScriptsOfTier(3),
-        tier4: getScriptsOfTier(4),
-        tier5: getScriptsOfTier(5),
-        tier6: getScriptsOfTier(6)
+        scriptList: [
+            getScriptsOfTier(0),
+            getScriptsOfTier(1),
+            getScriptsOfTier(2),
+            getScriptsOfTier(3),
+            getScriptsOfTier(4),
+            getScriptsOfTier(5),
+            getScriptsOfTier(6)
+        ]
     },
     components: {
         'item-group': itemGroup
