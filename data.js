@@ -490,6 +490,10 @@ let RIPDATA = [
     }
 ]
 
+function getScriptsOfTier(tier) {
+    return RIPDATA.filter(sc => sc.tier === tier)
+}
+
 let KNACKS = [
     {
         id: "lote",

@@ -7,11 +7,14 @@
 
 <body>
     <div id="app">
-        <fieldset id="info" v-model="selected" class="grid-container">
+        <fieldset id="info" class="grid-container">
             <select name="" id="items" v-model="selected">
+                <item-group label='Fundamentals' :list='fundamentals'></item-group>        
+                <!--
                 <option v-for="item in items" v-bind:value="item">
                     {{ item.title }}
                 </option>
+                -->
             </select>
             <span id="title" class="item title">{{ selected.title }} ({{ selected.devpath }})</span>
             <span class="item label">Tier</span></span><span id="tier" class="item datum"> {{ selected.tier }}</span>
@@ -40,7 +43,7 @@
             </div>
             <legend>Choose Knacks</legend>
         </fieldset>
-        <div id="knack-display" v-model='chosenKnacks'>
+        <div id="knack-display" v-bind='chosenKnacks'>
             {{ chosenKnacks.join(',') }}
         </div>
     </div>
@@ -49,7 +52,7 @@
             Greenleaf.</a>
     </footer>
 </body>
-<script src="vue.min.js"></script>
+<script src="vue.js"></script>
 <script src='data.js'></script>
 <script src='app.js'></script>
 
