@@ -16,8 +16,32 @@
     font-weight: bold;
 }
 
+.checklist {
+    display: block;
+}
+
+#info {
+    float: left;
+    padding: 1em;
+    max-width: 30%;
+}
+
+#knacks {
+    max-width: 50%;
+    float: left;
+    padding: 1em;
+}
+
 footer {
     font-size: 24px;
     position: fixed;
     bottom: 0;
+}
+
+label {
+    display: inline;
+}
+
+input[type=checkbox] {
+    display: inline;
 }

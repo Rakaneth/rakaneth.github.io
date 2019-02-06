@@ -7,21 +7,18 @@
 
 <body>
     <div id="app">
-        <div id="script-select">
+        <fieldset id="info" v-model="selected" class="grid-container">
             <select name="" id="items" v-model="selected">
                 <option v-for="item in items" v-bind:value="item">
                     {{ item.title }}
                 </option>
             </select>
-        </div>
-        <div id="info" v-bind:value="selected" class="grid-container">
             <span id="title" class="item title">{{ selected.title }} ({{ selected.devpath }})</span>
             <span class="item label">Tier</span></span><span id="tier" class="item datum"> {{ selected.tier }}</span>
             <span class="item label">Developer</span><span id="developer" class="item datum"> {{ selected.developer }}
             </span>
             <span class="item label">Memory Usage</span><span id="memory" class="item datum">{{ selected.memoryusage }}</span>
-            <span class="item label">Codin' Required</span><span id="requirements" class="item datum">{{selected.requirements
-                || "Basic"}}</span>
+            <span class="item label">Codin' Required</span><span id="requirements" class="item datum">{{selected.requirements || "Basic"}}</span>
             <span class="item label">Use Case</span><span id="use" class="item datum">{{ selected.usecase }}</span>
             <span class="item label">Cost</span><span id="cost" class="item datum">{{ selected.cost }} </span>
             <span class="item label">Delivery</span><span id="delivery" class="item datum"> {{ selected.delivery }}</span>
@@ -34,6 +31,17 @@
                 class="item datum">{{ selected.active }}</span>
             <span v-if="selected.tier==6" class="item label">Once</span><span id="hotsim-once" v-if="selected.tier==6"
                 class="item datum">{{ selected.once }}</span>
+            <legend>Script Details</legend>
+        </fieldset>
+        <fieldset id="knacks">
+            <div v-for='knack in knacks'>
+                <label v-bind:for='knack.id'>
+                    <input type="checkbox" v-bind:id='knack.id' v-bind:value="knack.display" v-model="chosenKnacks" class='checklist'>{{ knack.display }}</label>
+            </div>
+            <legend>Choose Knacks</legend>
+        </fieldset>
+        <div id="knack-display" v-model='chosenKnacks'>
+            {{ chosenKnacks.join(',') }}
         </div>
     </div>
     <footer>
@@ -42,7 +50,7 @@
     </footer>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src='rip.js'></script>
 <script src='data.js'></script>
+<script src='app.js'></script>
 
 </html>
