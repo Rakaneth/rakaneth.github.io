@@ -9,7 +9,7 @@
 }
 
 .item {
-    display: inline;
+    float: left;
 }
 
 .label {
@@ -23,8 +23,10 @@
 #info {
     float: left;
     padding: 1em;
-    max-width: 30%;
+    width: 25vw;
     font-size: 24px;
+    height: 25vw;
+    overflow-y: scroll;
 }
 
 #knacks {
@@ -38,6 +40,7 @@ footer {
     font-size: 24px;
     position: fixed;
     bottom: 0;
+    right: 0;
 }
 
 label {
