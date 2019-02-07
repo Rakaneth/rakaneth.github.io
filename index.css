@@ -20,7 +20,7 @@
     display: block;
 }
 
-#info {
+.section {
     float: left;
     padding: 1em;
     width: 25vw;
@@ -29,10 +29,23 @@
     overflow-y: scroll;
 }
 
+#knacks li {
+   list-style-type: none; 
+}
+
 #knacks {
     max-width: 50%;
     float: left;
     padding: 1em;
+    font-size: 24px;
+    overflow-y: hidden;
+}
+
+#info select {
+    font-size: 24px;
+}
+
+#info button {
     font-size: 24px;
 }
 

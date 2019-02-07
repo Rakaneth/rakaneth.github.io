@@ -8,16 +8,8 @@
 <body>
     <div id="app">
         <scr-info :d='scriptList'></scr-info>
-        <fieldset id="knacks">
-            <div v-for='knack in knacks'>
-                <label v-bind:for='knack.id'>
-                    <input type="checkbox" v-bind:id='knack.id' v-bind:value="knack.display" v-model="chosenKnacks" class='checklist'>{{ knack.display }}</label>
-            </div>
-            <legend>Choose Knacks</legend>
-        </fieldset>
-        <div id="knack-display" v-bind='chosenKnacks'>
-            {{ chosenKnacks.join(',') }}
-        </div>
+        <loadout-display :loadout='loadout'></loadout-display>
+        <knack-select :list='knacks'></knack-select>
     </div>
     <footer>
         Please report errors or bugs to <a href="mailto:quincy.west.codes@outlook.com?Subject=Riparian%20Flow%20Site%Issue">Walker

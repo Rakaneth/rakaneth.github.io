@@ -1,5 +1,30 @@
 
+let loadoutDisplay = {
+    props: ['loadout'],
+    template: `
+        <fieldset id='loadout' class='section'>
+            <legend>Current Loadout</legend>
+            <ul>
+                <li v-for='item in loadout'>{{ item.title }}, <em>{{ item.memoryusage }} Memory</em></li>
+            </ul>
+        </fieldset>
+    `
+}
 
+let knackSelect = {
+    props: ['list'],
+    template: `
+        <fieldset id='knacks' class='section'>
+            <legend>Knacks</legend>
+            <li v-for='knack in list'>
+                <label :for='knack.id'>
+                    <input type='checkbox' :id='knack.id' :value='knack.display' v-model='$root.chosenKnacks'>
+                    {{ knack.display }}
+                </label>
+            </li>
+        </fieldset>
+    `
+}
 
 let scrInfo = {
     props: ['d'],
@@ -14,11 +39,19 @@ let scrInfo = {
             this.selected = this.d[whichList].list[whichItem]
         },
         addToLoadout: function () {
-            this.$root.$data.loadout.add(this.selected)
+            if (this.$root.$data.loadout.indexOf(this.selected) === -1) {
+                this.$root.$data.loadout.push(this.selected)
+            }
+        },
+        removeFromLoadout: function () {
+            this.$root.$data.loadout = this.$root.$data.loadout.filter(f => f !== this.selected)
+        },
+        clearLoadout: function () {
+            this.$root.resetLoadout()
         }
     },
     template: `
-        <fieldset id='info' class='grid-container'>
+        <fieldset id='info' class='grid-container section'>
             <legend>Script Details</legend>
             <select @change='updateSelected' class='title'>
                 <optgroup v-for='item in d' :label='item.group'>
@@ -27,7 +60,9 @@ let scrInfo = {
                     </option>
                 </optgroup>
             </select>
-            <button @click='addToLoadout' class='title'>Add to Loadout</button>
+            <button @click='addToLoadout'>Add to Loadout</button>
+            <button @click='removeFromLoadout'>Remove from Loadout</button>
+            <button @click='clearLoadout' class=title>Clear Loadout</button>
             <div id="title" class="item title">{{ selected.title }} ({{ selected.devpath }})</div>
             <div class="item label">Tier</div></div><div id="tier" class="item datum"> {{ selected.tier }}</div>
             <div class="item label">Developer</div><div id="developer" class="item datum"> {{ selected.developer }}
@@ -56,7 +91,11 @@ let app = new Vue({
         items: RIPDATA,
         knacks: KNACKS,
         chosenKnacks: [],
-        loadout: new Set(),
+        loadout: [
+            RIPDATA[0],
+            RIPDATA[1],
+            RIPDATA[2]
+        ],
         scriptList: [
             { group: 'Fundamentals', list: getScriptsOfTier(0) },
             { group: 'Tier 1', list: getScriptsOfTier(1) },
@@ -67,8 +106,19 @@ let app = new Vue({
             { group: 'Tier 6 (HOTSIM)', list: getScriptsOfTier(6) }
         ]
     },
+    methods: {
+        resetLoadout: function () {
+            this.loadout = [
+                RIPDATA[0],
+                RIPDATA[1],
+                RIPDATA[2]
+            ]
+        }
+    },
     components: {
         'scr-info': scrInfo,
+        'loadout-display': loadoutDisplay,
+        'knack-select': knackSelect
     }
 })
 
