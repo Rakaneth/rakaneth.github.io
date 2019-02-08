@@ -25,56 +25,61 @@ let loadoutDisplay = {
         }
     },
     template: `
-        <fieldset id='loadout' class='section'>
-            <legend>Current Loadout</legend>
-            <div>
-                <label for='hacklevel'>
-                    Hackin'    
-                    <select v-model='hackLevel'>
-                        <optgroup label='Basic'>
-                            <option :value=1>1</option>
-                            <option :value=2>2</option>
-                        </optgroup>
-                        <optgroup label='Intermediate'>
-                            <option :value=3>3</option>
-                            <option :value=4>4</option>
-                        </optgroup>
-                        <optgroup label='Advanced'>
-                            <option :value=5>5</option>
-                            <option :value=6>6</option>
-                        </optgroup>
-                        <optgroup label='Larger Than Life'>
-                            <option :value=7>7</option>
-                        </optgroup>
-                    </select>
-                </label>
-            </div>
-            <fieldset id='loadout-list'>
-                <legend>Loadout</legend>
-                <ul>
-                    <li v-for='item in loadout'>
-                        {{ item.title }}
+        <div id='loadout' class='section big'>
+            <fieldset>
+                <legend>Current Loadout</legend>
+                <div>
+                    <label id='hacklabel' for='hacklevel'>
+                        Hackin'    
+                        <select v-model='hackLevel' class='big'>
+                            <optgroup label='Basic'>
+                                <option :value=1>1</option>
+                                <option :value=2>2</option>
+                            </optgroup>
+                            <optgroup label='Intermediate'>
+                                <option :value=3>3</option>
+                                <option :value=4>4</option>
+                            </optgroup>
+                            <optgroup label='Advanced'>
+                                <option :value=5>5</option>
+                                <option :value=6>6</option>
+                            </optgroup>
+                            <optgroup label='Larger Than Life'>
+                                <option :value=7>7</option>
+                            </optgroup>
+                        </select>
+                    </label>
+                </div>
+                <div>
+                    <fieldset id='loadout-list'>
+                        <legend>Loadout</legend>
                         <ul>
-                            <li><em>Memory Usage: {{ item.memoryusage }}</em></li>
-                            <li><em> Use Case: {{ item.usecase }}</em></li>
+                            <li v-for='item in loadout'>
+                                {{ item.title }}
+                                <ul>
+                                    <li><em>Memory Usage: {{ item.memoryusage }}</em></li>
+                                    <li><em> Use Case: {{ item.usecase }}</em></li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                </ul>
+                    </fieldset>
+                </div>
+                <div id='loadout-summary' class='grid-container'>
+                    <div class='label'>Total Memory Used</div> <div>{{ getTotalMemory(loadout) }}</div>
+                    <div class='label'><span :class='classObj'>Size in Blocks</span></div> <div :class='classObj'>{{ getBlockSize(loadout) }}</div>
+                    <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ hackLevel }}</div>
+                    <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ getMaxBlox() }}</div>
+                </div>
             </fieldset>
-            <div id='loadout-summary' class='grid-container'>
-                <div class='label'>Total Memory Used</div> <div>{{ getTotalMemory(loadout) }}</div>
-                <div class='label'>Size in Blocks</div> <div :class='classObj'>{{ getBlockSize(loadout) }}</div>
-                <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ hackLevel }}</div>
-                <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ getMaxBlox() }}</div>
-            </div>
-        </fieldset>
+            <button id='printbtn' onclick='window.print()' class='big'>Print Loadout</button>
+        </div>
     `
 }
 
 let knackSelect = {
     props: ['list'],
     template: `
-        <fieldset id='knacks' class='section'>
+        <fieldset id='knacks' class='section big'>
             <legend>Knacks</legend>
             <li v-for='knack in list'>
                 <label :for='knack.id'>
@@ -111,37 +116,39 @@ let scrInfo = {
         }
     },
     template: `
-        <fieldset id='info' class='grid-container section'>
-            <legend>Script Details</legend>
-            <select @change='updateSelected' class='title'>
-                <optgroup v-for='item in d' :label='item.group'>
-                    <option v-for='sc in item.list' :value="d.indexOf(item)+','+item.list.indexOf(sc)">
-                        {{ sc.title }}
-                    </option>
-                </optgroup>
-            </select>
-            <button @click='addToLoadout'>Add to Loadout</button>
-            <button @click='removeFromLoadout'>Remove from Loadout</button>
-            <button @click='clearLoadout' class=title>Clear Loadout</button>
-            <div id="title" class="item title">{{ selected.title }} ({{ selected.devpath }})</div>
-            <div class="item label">Tier</div></div><div id="tier" class="item datum"> {{ selected.tier }}</div>
-            <div class="item label">Developer</div><div id="developer" class="item datum"> {{ selected.developer }}
-            </div>
-            <div class="item label">Memory Usage</div><div id="memory" class="item datum">{{ selected.memoryusage }}</div>
-            <div class="item label">Codin' Required</div><div id="requirements" class="item datum">{{selected.requirements || "Basic"}}</div>
-            <div class="item label">Use Case</div><div id="use" class="item datum">{{ selected.usecase }}</div>
-            <div class="item label">Cost</div><div id="cost" class="item datum">{{ selected.cost }} </div>
-            <div class="item label">Delivery</div><div id="delivery" class="item datum"> {{ selected.delivery }}</div>
-            <div class="item label">Mode</div><div id="mode" class="item datum">{{ selected.mode }}</div>
-            <div class="item label">Functions</div><div id="functions" class="item datum"> {{ selected.functions }}
-            </div>
-            <div v-if="selected.tier==6" class="item label">Passive</div><div id="hotsim-passive" v-if="selected.tier==6"
-                class="item datum">{{ selected.passive }}</div>
-            <div v-if="selected.tier==6" class="item label">Active</div><div id="hotsim-active" v-if="selected.tier==6"
-                class="item datum">{{ selected.active }}</div>
-            <div v-if="selected.tier==6" class="item label">Once</div><div id="hotsim-once" v-if="selected.tier==6"
-                class="item datum">{{ selected.once }}</div>
-        </fieldset>
+        <div id='info-container'>
+            <fieldset id='info' class='grid-container section big'>
+                <legend>Script Details</legend>
+                <select @change='updateSelected' class='title big'>
+                    <optgroup v-for='item in d' :label='item.group'>
+                        <option v-for='sc in item.list' :value="d.indexOf(item)+','+item.list.indexOf(sc)">
+                            {{ sc.title }}
+                        </option>
+                    </optgroup>
+                </select>
+                <button @click='addToLoadout' class='big'>Add to Loadout</button>
+                <button @click='removeFromLoadout' class='big'>Remove from Loadout</button>
+                <button @click='clearLoadout' class='big'>Clear Loadout</button>
+                <div id="title" class="item title">{{ selected.title }} ({{ selected.devpath }})</div>
+                <div class="item label">Tier</div><div id="tier" class="item datum"> {{ selected.tier }}</div>
+                <div class="item label">Developer</div><div id="developer" class="item datum"> {{ selected.developer }}
+                </div>
+                <div class="item label">Memory Usage</div><div id="memory" class="item datum">{{ selected.memoryusage }}</div>
+                <div class="item label">Codin' Required</div><div id="requirements" class="item datum">{{selected.requirements || "Basic"}}</div>
+                <div class="item label">Use Case</div><div id="use" class="item datum">{{ selected.usecase }}</div>
+                <div class="item label">Cost</div><div id="cost" class="item datum">{{ selected.cost }} </div>
+                <div class="item label">Delivery</div><div id="delivery" class="item datum"> {{ selected.delivery }}</div>
+                <div class="item label">Mode</div><div id="mode" class="item datum">{{ selected.mode }}</div>
+                <div class="item label">Functions</div><div id="functions" class="item datum"> {{ selected.functions }}
+                </div>
+                <div v-if="selected.tier==6" class="item label">Passive</div><div id="hotsim-passive" v-if="selected.tier==6"
+                    class="item datum">{{ selected.passive }}</div>
+                <div v-if="selected.tier==6" class="item label">Active</div><div id="hotsim-active" v-if="selected.tier==6"
+                    class="item datum">{{ selected.active }}</div>
+                <div v-if="selected.tier==6" class="item label">Once</div><div id="hotsim-once" v-if="selected.tier==6"
+                    class="item datum">{{ selected.once }}</div>
+            </fieldset>
+        </div>
     `
 }
 
