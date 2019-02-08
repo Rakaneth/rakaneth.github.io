@@ -21,12 +21,34 @@ let loadoutDisplay = {
             let tap = this.getMaxBlox() - this.getBlockSize(loadout)
             return Math.max(0, tap)
         },
+        getsLOTEBonus(loadout) {
+            return loadout.every(scr => scr.tier === 0 || isUtility(scr) || isDetection(scr))
+        },
+        getsPEBonus(loadout) {
+            return loadout.every(scr => scr.tier === 0 || isDamage(scr) || isEnhancement(scr))
+        },
+        getsSABonus(loadout) {
+            return loadout.every(scr => scr.tier === 0 || isDefense(scr) || isDisabling(scr))
+        },
+
     },
     computed: {
         classObj: function () {
             return {
                 memerror: this.getBlockSize(this.loadout) > this.getMaxBlox()
             }
+        },
+        isLOTEReady: function () {
+            let yes = this.$root.chosenKnacks.includes('lote')
+            return !!yes && this.getsLOTEBonus(this.$root.loadout)
+        },
+        isPEReady: function () {
+            let yes = this.$root.chosenKnacks.includes('pe')
+            return !!yes && this.getsPEBonus(this.$root.loadout)
+        },
+        isSAReady: function () {
+            let yes = this.$root.chosenKnacks.includes('sa')
+            return !!yes && this.getsSABonus(this.$root.loadout)
         }
     },
     template: `
@@ -83,6 +105,15 @@ let loadoutDisplay = {
                     <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ hackLevel }}</div>
                     <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ getMaxBlox() }}</div>
                     <div class='label'>TAP</div><div>{{ getTap(loadout) }}</div>
+                    <div class='label' v-if='isLOTEReady'>
+                        <em>Listen to the Echoes</em> allows you to activate any Script in this loadout at no cost once per Rest.
+                    </div>
+                    <div class='label' v-if='isPEReady'>
+                        <em>Precision Engineering</em> allows you to activate any Script in this loadout at no cost once per Rest.
+                    </div>
+                    <div class='label' v-if='isSAReady'>
+                        <em>System Administrator</em> allows you to activate any Script in this loadout at no cost once per Rest.
+                    </div>
                 </div>
             </fieldset>
             <button id='printbtn' onclick='window.print()' class='big'>Print Loadout</button>
@@ -96,13 +127,22 @@ let knackSelect = {
         <div id='knacks' class='section big'>
             <fieldset>
                 <legend>Knacks</legend>
-                <li v-for='knack in list'>
-                    <label :for='knack.id'>
-                        <input type='checkbox' :id='knack.id' :value='knack.display' v-model='$root.chosenKnacks'>
-                        {{ knack.display }}
-                    </label>
-                </li>
+                <ul>
+                    <li v-for='knack in list'>
+                        <label :for='knack.id'>
+                            <input type='checkbox' :id='knack.id' :value='knack.id' v-model='$root.chosenKnacks'>
+                            {{ knack.display }}
+                        </label>
+                    </li>
+                </ul>
             </fieldset>
+            <div>
+                <ul>
+                    <li v-for='knackid in $root.chosenKnacks'>
+                        {{ $root.getKnack(knackid).display }}
+                    </li>
+                </ul>
+            </div>
         </div>
     `
 }
@@ -129,7 +169,7 @@ let scrInfo = {
         },
         clearLoadout: function () {
             this.$root.resetLoadout()
-        }
+        },
     },
     template: `
         <div id='info-container' class='section'>
@@ -197,6 +237,9 @@ let app = new Vue({
                 RIPDATA[2]
             ]
         },
+        getKnack: function (id) {
+            return this.knacks.find(el => el.id === id)
+        }
     },
     components: {
         'scr-info': scrInfo,

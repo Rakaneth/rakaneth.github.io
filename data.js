@@ -494,6 +494,30 @@ function getScriptsOfTier(tier) {
     return RIPDATA.filter(sc => sc.tier === tier)
 }
 
+function isDetection(scr) {
+    return scr.usecase.includes('Detection')
+}
+
+function isUtility(scr) {
+    return scr.usecase.includes('Utility')
+}
+
+function isDamage(scr) {
+    return scr.usecase.includes('Damage')
+}
+
+function isEnhancement(scr) {
+    return scr.usecase.includes('Enhancement')
+}
+
+function isDefense(scr) {
+    return scr.usecase.includes('Defense')
+}
+
+function isDisabling(scr) {
+    return scr.usecase.includes('Disabling')
+}
+
 let KNACKS = [
     {
         id: "lote",
