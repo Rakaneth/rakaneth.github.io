@@ -31,37 +31,36 @@ let loadoutDisplay = {
     },
     template: `
         <div id='loadout' class='section big'>
+            <div id='loadout-controls'>
+                <label id='hacklabel' for='hacklevel'>
+                    Hackin'    
+                    <select v-model='hackLevel' class='big'>
+                        <optgroup label='Basic'>
+                            <option :value=1>1</option>
+                            <option :value=2>2</option>
+                        </optgroup>
+                        <optgroup label='Intermediate'>
+                            <option :value=3>3</option>
+                            <option :value=4>4</option>
+                        </optgroup>
+                        <optgroup label='Advanced'>
+                            <option :value=5>5</option>
+                            <option :value=6>6</option>
+                        </optgroup>
+                        <optgroup label='Larger Than Life'>
+                            <option :value=7>7</option>
+                        </optgroup>
+                    </select>
+                </label><br>
+                <label id='loadoutid-label' for='change-lid'>
+                    Loadout ID
+                    <input v-model='loadoutID' type='textbox' id='change-lid' class='big'>
+                </label>
+            </div>
             <fieldset>
-                <legend>Current Loadout</legend>
-                <div id='loadout-controls' class='grid-container'>
-                    <label id='hacklabel' for='hacklevel'>
-                        Hackin'    
-                        <select v-model='hackLevel' class='big'>
-                            <optgroup label='Basic'>
-                                <option :value=1>1</option>
-                                <option :value=2>2</option>
-                            </optgroup>
-                            <optgroup label='Intermediate'>
-                                <option :value=3>3</option>
-                                <option :value=4>4</option>
-                            </optgroup>
-                            <optgroup label='Advanced'>
-                                <option :value=5>5</option>
-                                <option :value=6>6</option>
-                            </optgroup>
-                            <optgroup label='Larger Than Life'>
-                                <option :value=7>7</option>
-                            </optgroup>
-                        </select>
-                    </label>
-                    <label id='loadoutid-label' for='change-lid'>
-                        Change Loadout ID
-                        <input v-model='loadoutID' type='textbox' id='change-lid' class='big'>
-                    </label>
-                </div>
+                <legend>{{ loadoutID }}</legend>
                 <div>
                     <fieldset id='loadout-list'>
-                        <legend>{{ loadoutID }}</legend>
                         <ul>
                             <li v-for='item in loadout'>
                                 {{ item.title }}

@@ -16,6 +16,7 @@ body {
 
 #loadout-list {
     overflow: auto;
+    border: none;
 }
 
 #loadout-controls {
