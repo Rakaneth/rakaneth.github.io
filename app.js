@@ -1,12 +1,72 @@
 
 let loadoutDisplay = {
     props: ['loadout'],
+    data: function () {
+        return {
+            hackLevel: 1
+        }
+    },
+    methods: {
+        getTotalMemory(loadout) {
+            return loadout.reduce((total, nxt) => total + nxt.memoryusage, 0)
+        },
+        getBlockSize(loadout) {
+            return Math.ceil(this.getTotalMemory(loadout) / 4)
+        },
+        getMaxBlox() {
+            return Math.ceil(this.hackLevel / 2)
+        }
+    },
+    computed: {
+        classObj: function () {
+            return {
+                memerror: this.getBlockSize(this.loadout) > this.getMaxBlox()
+            }
+        }
+    },
     template: `
         <fieldset id='loadout' class='section'>
             <legend>Current Loadout</legend>
-            <ul>
-                <li v-for='item in loadout'>{{ item.title }}, <em>{{ item.memoryusage }} Memory</em></li>
-            </ul>
+            <div>
+                <label for='hacklevel'>
+                    Hackin'    
+                    <select v-model='hackLevel'>
+                        <optgroup label='Basic'>
+                            <option :value=1>1</option>
+                            <option :value=2>2</option>
+                        </optgroup>
+                        <optgroup label='Intermediate'>
+                            <option :value=3>3</option>
+                            <option :value=4>4</option>
+                        </optgroup>
+                        <optgroup label='Advanced'>
+                            <option :value=5>5</option>
+                            <option :value=6>6</option>
+                        </optgroup>
+                        <optgroup label='Larger Than Life'>
+                            <option :value=7>7</option>
+                        </optgroup>
+                    </select>
+                </label>
+            </div>
+            <fieldset id='loadout-list'>
+                <legend>Loadout</legend>
+                <ul>
+                    <li v-for='item in loadout'>
+                        {{ item.title }}
+                        <ul>
+                            <li><em>Memory Usage: {{ item.memoryusage }}</em></li>
+                            <li><em> Use Case: {{ item.usecase }}</em></li>
+                        </ul>
+                    </li>
+                </ul>
+            </fieldset>
+            <div id='loadout-summary' class='grid-container'>
+                <div class='label'>Total Memory Used</div> <div>{{ getTotalMemory(loadout) }}</div>
+                <div class='label'>Size in Blocks</div> <div :class='classObj'>{{ getBlockSize(loadout) }}</div>
+                <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ hackLevel }}</div>
+                <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ getMaxBlox() }}</div>
+            </div>
         </fieldset>
     `
 }
@@ -113,7 +173,7 @@ let app = new Vue({
                 RIPDATA[1],
                 RIPDATA[2]
             ]
-        }
+        },
     },
     components: {
         'scr-info': scrInfo,

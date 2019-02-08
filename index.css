@@ -25,12 +25,21 @@
     padding: 1em;
     width: 25vw;
     font-size: 24px;
-    height: 25vw;
+    height: 40vw;
     overflow-y: scroll;
 }
 
-#knacks li {
-   list-style-type: none; 
+.error {
+    color: red;
+}
+
+.section select {
+    font-size: 24px;
+}
+
+#loadout-list {
+    overflow-y: scroll;
+    height: 50%;
 }
 
 #knacks {
@@ -41,8 +50,8 @@
     overflow-y: hidden;
 }
 
-#info select {
-    font-size: 24px;
+#knacks li {
+   list-style-type: none; 
 }
 
 #info button {
