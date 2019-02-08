@@ -22,25 +22,19 @@
 
 .section {
     float: left;
-    width: 25vw;
+    width: 30vw;
     height: 40vw;
     overflow-y: scroll;
+    border: 1px solid black;
 }
 
-.error {
+.memerror {
     color: red;
 }
 
 #loadout-list {
     overflow-y: scroll;
     height: 50%;
-}
-
-#knacks {
-    max-width: 50%;
-    float: left;
-    padding: 1em;
-    overflow-y: hidden;
 }
 
 #knacks li {

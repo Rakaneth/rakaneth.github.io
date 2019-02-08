@@ -3,6 +3,7 @@
 
 # Screenshot
 *.gif
+*.pdf
 
 # dev vue
 vue.js

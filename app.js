@@ -3,7 +3,8 @@ let loadoutDisplay = {
     props: ['loadout'],
     data: function () {
         return {
-            hackLevel: 1
+            hackLevel: 1,
+            loadoutID: "Loadout"
         }
     },
     methods: {
@@ -15,7 +16,11 @@ let loadoutDisplay = {
         },
         getMaxBlox() {
             return Math.ceil(this.hackLevel / 2)
-        }
+        },
+        getTap(loadout) {
+            let tap = this.getMaxBlox() - this.getBlockSize(loadout)
+            return Math.max(0, tap)
+        },
     },
     computed: {
         classObj: function () {
@@ -28,7 +33,7 @@ let loadoutDisplay = {
         <div id='loadout' class='section big'>
             <fieldset>
                 <legend>Current Loadout</legend>
-                <div>
+                <div id='loadout-controls' class='grid-container'>
                     <label id='hacklabel' for='hacklevel'>
                         Hackin'    
                         <select v-model='hackLevel' class='big'>
@@ -49,16 +54,25 @@ let loadoutDisplay = {
                             </optgroup>
                         </select>
                     </label>
+                    <label id='loadoutid-label' for='change-lid'>
+                        Change Loadout ID
+                        <input v-model='loadoutID' type='textbox' id='change-lid' class='big'>
+                    </label>
                 </div>
                 <div>
                     <fieldset id='loadout-list'>
-                        <legend>Loadout</legend>
+                        <legend>{{ loadoutID }}</legend>
                         <ul>
                             <li v-for='item in loadout'>
                                 {{ item.title }}
                                 <ul>
                                     <li><em>Memory Usage: {{ item.memoryusage }}</em></li>
-                                    <li><em> Use Case: {{ item.usecase }}</em></li>
+                                    <li><em> Functions:</em> {{ item.functions }}</li>
+                                    <div v-if='item.tier==6'>
+                                        <li><em>Passive</em> {{ item.passive }}</li>
+                                        <li><em>Active</em> {{ item.active }}</li>
+                                        <li><em>Once</em> {{ item.once }}</li>
+                                    </div>
                                 </ul>
                             </li>
                         </ul>
@@ -69,6 +83,7 @@ let loadoutDisplay = {
                     <div class='label'><span :class='classObj'>Size in Blocks</span></div> <div :class='classObj'>{{ getBlockSize(loadout) }}</div>
                     <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ hackLevel }}</div>
                     <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ getMaxBlox() }}</div>
+                    <div class='label'>TAP</div><div>{{ getTap(loadout) }}</div>
                 </div>
             </fieldset>
             <button id='printbtn' onclick='window.print()' class='big'>Print Loadout</button>
@@ -79,15 +94,17 @@ let loadoutDisplay = {
 let knackSelect = {
     props: ['list'],
     template: `
-        <fieldset id='knacks' class='section big'>
-            <legend>Knacks</legend>
-            <li v-for='knack in list'>
-                <label :for='knack.id'>
-                    <input type='checkbox' :id='knack.id' :value='knack.display' v-model='$root.chosenKnacks'>
-                    {{ knack.display }}
-                </label>
-            </li>
-        </fieldset>
+        <div id='knacks' class='section big'>
+            <fieldset>
+                <legend>Knacks</legend>
+                <li v-for='knack in list'>
+                    <label :for='knack.id'>
+                        <input type='checkbox' :id='knack.id' :value='knack.display' v-model='$root.chosenKnacks'>
+                        {{ knack.display }}
+                    </label>
+                </li>
+            </fieldset>
+        </div>
     `
 }
 
@@ -116,8 +133,8 @@ let scrInfo = {
         }
     },
     template: `
-        <div id='info-container'>
-            <fieldset id='info' class='grid-container section big'>
+        <div id='info-container' class='section'>
+            <fieldset id='info' class='grid-container big'>
                 <legend>Script Details</legend>
                 <select @change='updateSelected' class='title big'>
                     <optgroup v-for='item in d' :label='item.group'>

@@ -11,13 +11,14 @@ body {
     height: 100%;
     overflow: auto;
     font-size: 12px;
+    border: none;
 }
 
 #loadout-list {
     overflow: auto;
 }
 
-#hacklabel {
+#loadout-controls {
     visibility: hidden;
 }
 
