@@ -554,5 +554,14 @@ let KNACKS = [
     {
         id: "cm",
         display: "Code Monkey"
-    }
+    },
 ]
+
+function isEmpowered(kn) {
+    return /-em$/.test(kn.id)
+}
+
+function getBaseFromEmp(knID) {
+    let res = /(.*)-em$/.exec(knID)
+    return res[1]
+}

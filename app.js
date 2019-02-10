@@ -1,10 +1,10 @@
-
 let loadoutDisplay = {
     props: ['loadout'],
     data: function () {
         return {
             hackLevel: 1,
-            loadoutID: "Loadout"
+            loadoutID: "Loadout",
+            ram: false
         }
     },
     methods: {
@@ -29,8 +29,7 @@ let loadoutDisplay = {
         },
         getsSABonus(loadout) {
             return loadout.every(scr => scr.tier === 0 || isDefense(scr) || isDisabling(scr))
-        },
-
+        }
     },
     computed: {
         classObj: function () {
@@ -39,16 +38,22 @@ let loadoutDisplay = {
             }
         },
         isLOTEReady: function () {
-            let yes = this.$root.chosenKnacks.includes('lote')
+            let yes = this.$root.chosenKnacks.some(el => el.includes('lote'))
             return !!yes && this.getsLOTEBonus(this.$root.loadout)
         },
         isPEReady: function () {
-            let yes = this.$root.chosenKnacks.includes('pe')
+            let yes = this.$root.chosenKnacks.some(el => el.includes('pe'))
             return !!yes && this.getsPEBonus(this.$root.loadout)
         },
         isSAReady: function () {
-            let yes = this.$root.chosenKnacks.includes('sa')
+            let yes = this.$root.chosenKnacks.some(el => el.includes('sa'))
             return !!yes && this.getsSABonus(this.$root.loadout)
+        },
+        hasRAM: function () {
+            return this.$root.chosenKnacks.some(el => el.includes('sideloader'))
+        },
+        hasEmpRAM: function () {
+            return this.$root.chosenKnacks.includes('sideloader-em')
         }
     },
     template: `
@@ -77,6 +82,10 @@ let loadoutDisplay = {
                 <label id='loadoutid-label' for='change-lid'>
                     Loadout ID
                     <input v-model='loadoutID' type='textbox' id='change-lid' class='big'>
+                </label>
+                <label v-if='hasRAM' for='ram-box'>
+                    <input type='checkbox' id='ram-box' v-model='ram'>
+                    <span v-if='hasEmpRAM'>Empowered </span>RAM
                 </label>
             </div>
             <fieldset>
@@ -135,6 +144,12 @@ let knackSelect = {
                         </label>
                     </li>
                 </ul>
+                <div>
+                    <label v-for='knack in list' :for='knack.id'>
+                        <input type='radio' :id='knack.id' v-model='$root.empKnackID' :value=knack.id'
+                        {{ knack.display }}
+                    </label>
+                </div>
             </fieldset>
             <div>
                 <ul>
@@ -214,6 +229,7 @@ let app = new Vue({
         items: RIPDATA,
         knacks: KNACKS,
         chosenKnacks: [],
+        empKnackID: null,
         loadout: [
             RIPDATA[0],
             RIPDATA[1],
