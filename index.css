@@ -28,7 +28,7 @@
     border: 1px solid black;
 }
 
-.memerror {
+.memerror, .lvlerror {
     color: red;
 }
 
