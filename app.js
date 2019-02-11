@@ -8,7 +8,10 @@ let loadoutDisplay = {
     },
     methods: {
         getTotalMemory(loadout) {
-            return loadout.reduce((total, nxt) => total + nxt.memoryusage, 0)
+            return loadout.reduce((total, nxt) => {
+                let mem = nxt.tier == 6 ? 0 : nxt.memoryusage
+                return total + mem
+            }, 0)
         },
         getBlockSize(loadout) {
             return Math.ceil(this.getTotalMemory(loadout) / 4)
@@ -25,12 +28,12 @@ let loadoutDisplay = {
         },
         getsSABonus(loadout) {
             return loadout.every(scr => scr.tier === 0 || isDefense(scr) || isDisabling(scr))
-        }
+        },
     },
     computed: {
         classObj: function () {
             return {
-                memerror: this.getBlockSize(this.loadout) > this.maxBlox
+                memerror: this.getBlockSize(this.loadout) > this.maxBlox,
             }
         },
         isLOTEReady: function () {
@@ -66,7 +69,7 @@ let loadoutDisplay = {
             <div id='loadout-controls'>
                 <ul>
                     <li>
-                            <label id='hacklabel' for='hacklevel'>
+                        <label id='hacklabel' for='hacklevel'>
                             Hackin'    
                             <select id='hacklevel' v-model='$root.hackLevel' class='big'>
                                 <optgroup label='Basic'>
@@ -96,7 +99,7 @@ let loadoutDisplay = {
                     <li v-if='hasRAM'>
                         <label for='ram-box'>
                             <input type='checkbox' id='ram-box' v-model='ram'>
-                            <span v-if='hasEmpRAM'>Empowered </span>RAM
+                            <span v-if='hasEmpRAM'>Empowered </span>RAM Loadout
                         </label>
                     </li>
                 </ul>   
@@ -106,8 +109,8 @@ let loadoutDisplay = {
                 <div>
                     <fieldset id='loadout-list'>
                         <ul>
-                            <li v-for='item in loadout'>
-                                {{ item.title }}
+                            <li v-for='item in loadout' :class='{lvlerror: $root.isOverLevel(item)}'>
+                                {{ item.title }} <span v-if='$root.isOverLevel(item)'><em>(Hackin' level too low)</em></span>
                                 <ul>
                                     <li><em>Memory Usage: {{ item.memoryusage }}</em></li>
                                     <li><em> Functions:</em> {{ item.functions }}</li>
@@ -265,6 +268,23 @@ let app = new Vue({
         },
         getKnack: function (id) {
             return this.knacks.find(el => el.id === id)
+        },
+        isOverLevel(scr) {
+            let lvl = this.hackLevel
+            if (!scr.requirements) {
+                return false;
+            }
+            if (scr.tier === 6 && lvl < 6) {
+                return true;
+            }
+            switch (scr.requirements.toLowerCase()) {
+                case 'intermediate':
+                    return lvl < 3
+                case 'advanced':
+                    return lvl < 5
+                default:
+                    return false
+            }
         }
     },
     components: {
