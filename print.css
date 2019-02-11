@@ -26,3 +26,7 @@ body {
 #printbtn {
     visibility: hidden;
 }
+
+#loadout-summary {
+    page-break-before: always;
+}

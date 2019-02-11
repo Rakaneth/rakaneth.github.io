@@ -37,7 +37,7 @@
     height: 50%;
 }
 
-#knacks li {
+#knacks li, #loadout-controls li {
    list-style-type: none; 
 }
 

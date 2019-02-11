@@ -2,7 +2,6 @@ let loadoutDisplay = {
     props: ['loadout'],
     data: function () {
         return {
-            hackLevel: 1,
             loadoutID: "Loadout",
             ram: false
         }
@@ -14,12 +13,9 @@ let loadoutDisplay = {
         getBlockSize(loadout) {
             return Math.ceil(this.getTotalMemory(loadout) / 4)
         },
-        getMaxBlox() {
-            return Math.ceil(this.hackLevel / 2)
-        },
         getTap(loadout) {
-            let tap = this.getMaxBlox() - this.getBlockSize(loadout)
-            return Math.max(0, tap)
+            let tap = this.maxBlox - this.getBlockSize(loadout)
+            return this.hasRAM && !this.hasEmpRAM ? 0 : Math.max(0, tap)
         },
         getsLOTEBonus(loadout) {
             return loadout.every(scr => scr.tier === 0 || isUtility(scr) || isDetection(scr))
@@ -34,7 +30,7 @@ let loadoutDisplay = {
     computed: {
         classObj: function () {
             return {
-                memerror: this.getBlockSize(this.loadout) > this.getMaxBlox()
+                memerror: this.getBlockSize(this.loadout) > this.maxBlox
             }
         },
         isLOTEReady: function () {
@@ -53,40 +49,57 @@ let loadoutDisplay = {
             return this.$root.chosenKnacks.some(el => el.includes('sideloader'))
         },
         hasEmpRAM: function () {
-            return this.$root.chosenKnacks.includes('sideloader-em')
+            return this.$root.empKnackID === 'sideloader'
+        },
+        maxBlox() {
+            if (this.hasEmpRAM) {
+                return 2
+            } else if (this.hasRAM) {
+                return 1
+            } else {
+                return Math.ceil(this.$root.hackLevel / 2)
+            }
         }
     },
     template: `
         <div id='loadout' class='section big'>
             <div id='loadout-controls'>
-                <label id='hacklabel' for='hacklevel'>
-                    Hackin'    
-                    <select v-model='hackLevel' class='big'>
-                        <optgroup label='Basic'>
-                            <option :value=1>1</option>
-                            <option :value=2>2</option>
-                        </optgroup>
-                        <optgroup label='Intermediate'>
-                            <option :value=3>3</option>
-                            <option :value=4>4</option>
-                        </optgroup>
-                        <optgroup label='Advanced'>
-                            <option :value=5>5</option>
-                            <option :value=6>6</option>
-                        </optgroup>
-                        <optgroup label='Larger Than Life'>
-                            <option :value=7>7</option>
-                        </optgroup>
-                    </select>
-                </label><br>
-                <label id='loadoutid-label' for='change-lid'>
-                    Loadout ID
-                    <input v-model='loadoutID' type='textbox' id='change-lid' class='big'>
-                </label>
-                <label v-if='hasRAM' for='ram-box'>
-                    <input type='checkbox' id='ram-box' v-model='ram'>
-                    <span v-if='hasEmpRAM'>Empowered </span>RAM
-                </label>
+                <ul>
+                    <li>
+                            <label id='hacklabel' for='hacklevel'>
+                            Hackin'    
+                            <select id='hacklevel' v-model='$root.hackLevel' class='big'>
+                                <optgroup label='Basic'>
+                                    <option :value=1>1</option>
+                                    <option :value=2>2</option>
+                                </optgroup>
+                                <optgroup label='Intermediate'>
+                                    <option :value=3>3</option>
+                                    <option :value=4>4</option>
+                                </optgroup>
+                                <optgroup label='Advanced'>
+                                    <option :value=5>5</option>
+                                    <option :value=6>6</option>
+                                </optgroup>
+                                <optgroup label='Larger Than Life'>
+                                    <option :value=7>7</option>
+                                </optgroup>
+                            </select>
+                        </label>
+                    </li>
+                    <li>
+                        <label id='loadoutid-label' for='change-lid'>
+                            Loadout ID
+                            <input v-model='loadoutID' type='textbox' id='change-lid' class='big'>
+                        </label>
+                    </li>
+                    <li v-if='hasRAM'>
+                        <label for='ram-box'>
+                            <input type='checkbox' id='ram-box' v-model='ram'>
+                            <span v-if='hasEmpRAM'>Empowered </span>RAM
+                        </label>
+                    </li>
+                </ul>   
             </div>
             <fieldset>
                 <legend>{{ loadoutID }}</legend>
@@ -111,8 +124,8 @@ let loadoutDisplay = {
                 <div id='loadout-summary' class='grid-container'>
                     <div class='label'>Total Memory Used</div> <div>{{ getTotalMemory(loadout) }}</div>
                     <div class='label'><span :class='classObj'>Size in Blocks</span></div> <div :class='classObj'>{{ getBlockSize(loadout) }}</div>
-                    <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ hackLevel }}</div>
-                    <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ getMaxBlox() }}</div>
+                    <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ $root.hackLevel }}</div>
+                    <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ maxBlox }}</div>
                     <div class='label'>TAP</div><div>{{ getTap(loadout) }}</div>
                     <div class='label' v-if='isLOTEReady'>
                         <em>Listen to the Echoes</em> allows you to activate any Script in this loadout at no cost once per Rest.
@@ -144,20 +157,16 @@ let knackSelect = {
                         </label>
                     </li>
                 </ul>
-                <div>
-                    <label v-for='knack in list' :for='knack.id'>
-                        <input type='radio' :id='knack.id' v-model='$root.empKnackID' :value=knack.id'
-                        {{ knack.display }}
-                    </label>
-                </div>
             </fieldset>
-            <div>
+            <fieldset>
+                <legend>Empowered Knacks</legend>
                 <ul>
-                    <li v-for='knackid in $root.chosenKnacks'>
-                        {{ $root.getKnack(knackid).display }}
+                    <li v-for='knack in list'>
+                        <input type='radio' :id='knack.id' v-model='$root.empKnackID' :value='knack.id' :disabled='$root.hackLevel < 5'>
+                        Empowered {{ knack.display }}
                     </li>
                 </ul>
-            </div>
+            </fieldset>
         </div>
     `
 }
@@ -230,6 +239,7 @@ let app = new Vue({
         knacks: KNACKS,
         chosenKnacks: [],
         empKnackID: null,
+        hackLevel: 1,
         loadout: [
             RIPDATA[0],
             RIPDATA[1],
