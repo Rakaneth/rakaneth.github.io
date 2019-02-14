@@ -124,13 +124,15 @@ let loadoutDisplay = {
                         </ul>
                     </fieldset>
                 </div>
-                <div id='loadout-summary' class='grid-container'>
+                <div id='loadout-summary' class='loadout-container'>
                     <div class='label'>Total Memory Used</div> <div>{{ getTotalMemory(loadout) }}</div>
                     <div class='label'><span :class='classObj'>Size in Blocks</span></div> <div :class='classObj'>{{ getBlockSize(loadout) }}</div>
                     <div class='label'>Total Number of Blocks for Loadouts</div><div>{{ $root.hackLevel }}</div>
                     <div class='label'>Maximum Size of Any Single Loadout</div><div>{{ maxBlox }}</div>
                     <div class='label'>TAP</div><div>{{ getTap(loadout) }}</div>
-                    <div class='label' v-if='isLOTEReady'>
+                    
+                </div>
+                <div class='label' v-if='isLOTEReady'>
                         <em>Listen to the Echoes</em> allows you to activate any Script in this loadout at no cost once per Rest.
                     </div>
                     <div class='label' v-if='isPEReady'>
@@ -139,7 +141,6 @@ let loadoutDisplay = {
                     <div class='label' v-if='isSAReady'>
                         <em>System Administrator</em> allows you to activate any Script in this loadout at no cost once per Rest.
                     </div>
-                </div>
             </fieldset>
             <button id='printbtn' onclick='window.print()' class='big'>Print Loadout</button>
         </div>
