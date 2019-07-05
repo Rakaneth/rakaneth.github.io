@@ -55,9 +55,9 @@ let loadoutDisplay = {
             return this.$root.empKnackID === 'sideloader'
         },
         maxBlox() {
-            if (this.hasEmpRAM) {
+            if (this.hasEmpRAM && this.ram) {
                 return 2
-            } else if (this.hasRAM) {
+            } else if (this.hasRAM && this.ram) {
                 return 1
             } else {
                 return Math.ceil(this.$root.hackLevel / 2)
