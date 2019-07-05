@@ -237,7 +237,7 @@ let RIPDATA = [
     {
         tier: 3,
         title: 'Radiant Warrior\'s Mantle',
-        developer: 'Virginia Knights, Amnesty, 2018',
+        developer: 'Virginia Knights, Amnesty, 2318',
         devpath: 'F.D.O.U',
         memoryusage: 3,
         usecase: 'Defense, Enhancing',
