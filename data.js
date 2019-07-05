@@ -284,7 +284,7 @@ let RIPDATA = [
         cost: '1 Grit, no concentration',
         delivery: 'Packet',
         mode: 'Readied; activations equal to Hackin\' level',
-        functions: 'This Script produces its Magnitude in “Nano Slow” effects. You may also spend an activation to \'Purge Slow\' from any ally.',
+        functions: 'This Script produces its Magnitude in \'Nano Slow\' effects. You may also spend an activation to \'Purge Slow\' from any ally.',
         requirements: 'Intermediate'
     },
     {
